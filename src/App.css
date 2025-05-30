@@ -1,0 +1,10 @@
+.number {
+    all: unset;
+    cursor: pointer;
+    user-select: none;
+    font-size: 10rem;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
