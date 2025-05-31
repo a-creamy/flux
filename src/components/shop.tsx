@@ -1,18 +1,9 @@
+import { For } from 'solid-js';
 import '../App.css';
 import { setGame, game } from './game';
 
 const Producer = (props) => {
-    setGame("producers", () => [
-        ...game.producers,
-        {
-            name: props.name,
-            price: props.price,
-            amount: props.amount,
-            rate: props.rate,
-        }
-    ]);
-
-    let index: number = game.producers.length - 1;
+    let index: number = game.producers.findIndex(producer => producer.name == props.name);
 
     return (
         <div style={{
@@ -28,7 +19,7 @@ const Producer = (props) => {
                 if (game.number >= game.producers[index].price) {
                     setGame("number", () => game.number - game.producers[index].price);
                     setGame("producers", index, () => ({
-                        ...game.producers,
+                        ...game.producers[index],
                         price: game.producers[index].price * 1.15,
                         amount: game.producers[index].amount + 1,
                     }));
@@ -92,7 +83,11 @@ export default function Shop() {
                 width: '20vw',
                 border: '2px solid black',
             }}>
-                <Producer name="Counter" price={51} amount={0} rate={1} />
+                <For each={game.producers}>
+                    {(item, _) =>
+                        <Producer name={item.name} />
+                    }
+                </For>
             </div>
         </div>
     )

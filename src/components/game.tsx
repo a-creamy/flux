@@ -12,13 +12,37 @@ type Game = {
     click: number,
     nps: number,
     producers: Producers[],
+    save: Function,
+    load: Function,
 };
 
 export const [game, setGame] = createStore<Game>({
     number: 0,
     click: 1,
     nps: 0,
-    producers: [],
+    producers: [
+        { name: "Counter", price: 51, rate: 1, amount: 0 }
+    ],
+    save: () => {
+        const currentState = {
+            number: game.number,
+            click: game.click,
+            nps: game.nps,
+            producers: game.producers
+        };
+
+        localStorage.setItem("game", JSON.stringify(currentState));
+    },
+    load: () => {
+        const json = localStorage.getItem("game");
+        if (json) {
+            const savedGame = JSON.parse(json);
+            setGame("number", savedGame.number);
+            setGame("click", savedGame.click);
+            setGame("nps", savedGame.nps);
+            setGame("producers", savedGame.producers);
+        }
+    }
 });
 
 setInterval(() => {
@@ -32,3 +56,7 @@ setInterval(() => {
 setInterval(() => {
     setGame("number", () => game.number + game.nps / 100);
 }, 10);
+
+setInterval(() => {
+    game.save();
+}, 1000);
