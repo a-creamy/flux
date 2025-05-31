@@ -18,10 +18,11 @@ const Producer = (props) => {
         <div style={{
             "font-size": '2rem',
             "border-bottom": '2px solid black',
-            cursor: 'pointer',
             "user-select": 'none',
-            height: '8vh',
+            cursor: 'pointer',
+            height: '7%',
             width: '100%',
+            position: 'relative',
         }}
             onClick={() => {
                 if (game.number >= game.producers[index].price) {
@@ -33,10 +34,25 @@ const Producer = (props) => {
                     }));
                 }
             }}>
-            <div>{game.producers[index].name}</div>
-            <div>{game.producers[index].price}</div>
-            <div>{game.producers[index].amount}</div>
-            <div>{game.producers[index].rate}</div>
+            <div style={{
+                "font-size": '2rem',
+                position: 'absolute',
+                left: '3%',
+                top: '1%',
+            }}>{game.producers[index].name}</div>
+            <div style={{
+                "font-size": '1.5rem',
+                position: 'absolute',
+                left: '3%',
+                bottom: '1%',
+            }}>{Math.ceil(game.producers[index].price)}</div>
+            <div style={{
+                "font-size": '2rem',
+                position: 'absolute',
+                right: '3%',
+                top: '50%',
+                transform: 'translateY(-50%)',
+            }}>{game.producers[index].amount}</div>
         </div>
     )
 }
@@ -69,11 +85,11 @@ export default function Shop() {
             <div style={{
                 "z-index": 10,
                 position: 'absolute',
-                right: '5vw',
+                right: '1vh',
                 top: '50%',
                 transform: 'translateY(-50%)',
-                height: '90vh',
-                width: '30vw',
+                height: '98vh',
+                width: '20vw',
                 border: '2px solid black',
             }}>
                 <Producer name="Counter" price={51} amount={0} rate={1} />
