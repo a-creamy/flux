@@ -1,10 +1,10 @@
 import { createStore } from "solid-js/store";
 
 type Producers = {
-      name: string;
-      price: number;
-      amount: number;
-      rate: number;
+    name: string;
+    price: number;
+    amount: number;
+    rate: number;
 };
 
 type Game = {
@@ -26,9 +26,9 @@ setInterval(() => {
     for (let i = 0; i < game.producers.length; i++) {
         result += game.producers[i].amount * game.producers[i].rate;
     }
-    setGame("nps", prev => prev = result);
+    setGame("nps", () => result);
 }, 1000);
 
 setInterval(() => {
-    setGame("number", prev => prev += game.nps / 100);
+    setGame("number", () => game.number + game.nps / 100);
 }, 10);

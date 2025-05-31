@@ -2,8 +2,8 @@ import '../App.css';
 import { setGame, game } from './game';
 
 const Producer = (props) => {
-    setGame("producers", (prev) => [
-        ...prev,
+    setGame("producers", () => [
+        ...game.producers,
         {
             name: props.name,
             price: props.price,
@@ -26,9 +26,9 @@ const Producer = (props) => {
         }}
             onClick={() => {
                 if (game.number >= game.producers[index].price) {
-                    setGame("number", e => e -= game.producers[index].price);
-                    setGame("producers", index, (prev) => ({
-                        ...prev,
+                    setGame("number", () => game.number - game.producers[index].price);
+                    setGame("producers", index, () => ({
+                        ...game.producers,
                         price: game.producers[index].price * 1.15,
                         amount: game.producers[index].amount + 1,
                     }));
