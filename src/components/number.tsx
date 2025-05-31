@@ -6,7 +6,7 @@ export default function Number() {
         <>
             <button class="number" onClick={() => {
                 setGame('number', prev => prev + game.click);
-            }}>{game.number}</button>
+            }}>{Math.ceil(game.number)}</button>
         </>
     );
 }
