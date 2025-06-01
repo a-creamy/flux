@@ -7,11 +7,19 @@ type Producers = {
     rate: number;
 };
 
+type Random = {
+    name: string,
+    active: boolean,
+    time: number,
+}
+
 type Game = {
     number: number,
     click: number,
     nps: number,
     producers: Producers[],
+    random: Random[],
+    multiplier: number,
     save: Function,
     load: Function,
 };
@@ -24,6 +32,10 @@ export const [game, setGame] = createStore<Game>({
         { name: "Monkey", price: 32, rate: 0.1, amount: 0 },
         { name: "Counter", price: 151, rate: 1, amount: 0 },
     ],
+    random: [
+        { name: "Multiply", active: false, time: 0 },
+    ],
+    multiplier: 1,
     save: () => {
         const currentState = {
             number: game.number,
@@ -62,7 +74,7 @@ setInterval(() => {
     for (let i = 0; i < game.producers.length; i++) {
         result += game.producers[i].amount * game.producers[i].rate;
     }
-    setGame("nps", () => result);
+    setGame("nps", () => result * game.multiplier);
 }, 1000);
 
 setInterval(() => {
