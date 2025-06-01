@@ -21,7 +21,8 @@ export const [game, setGame] = createStore<Game>({
     click: 1,
     nps: 0,
     producers: [
-        { name: "Counter", price: 51, rate: 1, amount: 0 }
+        { name: "Monkey", price: 32, rate: 0.1, amount: 0 },
+        { name: "Counter", price: 151, rate: 1, amount: 0 },
     ],
     save: () => {
         const currentState = {
@@ -37,10 +38,21 @@ export const [game, setGame] = createStore<Game>({
         const json = localStorage.getItem("game");
         if (json) {
             const savedGame = JSON.parse(json);
+
+            const producers: { [key: string]: Producers } = {};
+            savedGame.producers.forEach((producer: Producers) => {
+                producers[producer.name] = producer;
+            });
+
+            const merged = game.producers.map((defaultProducer: Producers) => {
+                const savedProducer = producers[defaultProducer.name];
+                return savedProducer ? savedProducer : defaultProducer;
+            });
+
             setGame("number", savedGame.number);
             setGame("click", savedGame.click);
             setGame("nps", savedGame.nps);
-            setGame("producers", savedGame.producers);
+            setGame("producers", merged);
         }
     }
 });
