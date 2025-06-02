@@ -87,7 +87,7 @@ const Clock: Component<ClockProps> = (props) => {
                 setGame("time", () => game.time + 1);
             }}
         />
-    )
+    );
 }
 
 export default Clock;
