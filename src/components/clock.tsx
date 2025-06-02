@@ -71,8 +71,8 @@ const Clock: Component<ClockProps> = (props) => {
             minute = (minute * Math.PI / 30);
             second = (second * Math.PI / 30);
 
-            drawHand(hour, radius * 0.5, radius * 0.07);
-            drawHand(minute, radius * 0.8, radius * 0.07);
+            drawHand(hour, radius * 0.45, radius * 0.09);
+            drawHand(minute, radius * 0.75, radius * 0.05);
             drawHand(second, radius * 0.9, radius * 0.02);
         });
     });
