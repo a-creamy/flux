@@ -15,6 +15,8 @@ type Game = {
     time: number;
     tps: number; // time per second
     shop: Shop;
+    save: Function;
+    load: Function;
 }
 
 export const [game, setGame] = createStore<Game>({
@@ -22,10 +24,31 @@ export const [game, setGame] = createStore<Game>({
     tps: 0,
     shop: {
         producers: [
-            { name: "1st Cycle", amount: 0, price: 100, produce: 1 },
+            { name: "1st Cycle", amount: 1, price: 100, produce: 1 },
         ],
-    }
+    },
+    save: () => {
+        localStorage.setItem("game", JSON.stringify(game));
+    },
+    load: () => {
+        const json = localStorage.getItem("game");
+        if (json !== null) {
+            const savedGame: Game = JSON.parse(json);
+            if (savedGame == null || savedGame == undefined) {
+                return;
+            }
+
+            setGame("time", () => savedGame.time);
+            setGame("shop", "producers", () => savedGame.shop.producers);
+        }
+    },
 });
+
+game.load();
+
+setInterval(() => {
+    game.save();
+}, 10000);
 
 setInterval(() => {
     let result: number = 0;
@@ -40,3 +63,5 @@ setInterval(() => {
 setInterval(() => {
     setGame("time", () => game.time + game.tps / 100);
 }, 10);
+
+
