@@ -17,6 +17,7 @@ type Game = {
     shop: Shop;
     save: Function;
     load: Function;
+    format: Function;
 }
 
 export const [game, setGame] = createStore<Game>({
@@ -42,6 +43,61 @@ export const [game, setGame] = createStore<Game>({
             setGame("shop", "producers", () => savedGame.shop.producers);
         }
     },
+    format: (num: number) => {
+        num = Math.floor(num);
+
+        if (num < 60) {
+            return `${num} second${num !== 1 ? 's' : ''}`;
+        } else if (num < 3600) {
+            const minutes = Math.floor(num / 60);
+            const seconds = num % 60;
+            let result = `${minutes} minute${minutes !== 1 ? 's' : ''}`;
+            if (seconds > 0) {
+                result += ` ${seconds} second${seconds !== 1 ? 's' : ''}`;
+            }
+            return result;
+        } else if (num < 86400) {
+            const hours = Math.floor(num / 3600);
+            const minutes = Math.floor((num % 3600) / 60);
+            let result = `${hours} hour${hours !== 1 ? 's' : ''}`;
+            if (minutes > 0) {
+                result += ` ${minutes} minute${minutes !== 1 ? 's' : ''}`;
+            }
+            return result;
+        } else if (num < 604800) {
+            const days = Math.floor(num / 86400);
+            const hours = Math.floor((num % 86400) / 3600);
+            let result = `${days} day${days !== 1 ? 's' : ''}`;
+            if (hours > 0) {
+                result += ` ${hours} hour${hours !== 1 ? 's' : ''}`;
+            }
+            return result;
+        } else if (num < 2629746) {
+            const weeks = Math.floor(num / 604800);
+            const days = Math.floor((num % 604800) / 86400);
+            let result = `${weeks} week${weeks !== 1 ? 's' : ''}`;
+            if (days > 0) {
+                result += ` ${days} day${days !== 1 ? 's' : ''}`;
+            }
+            return result;
+        } else if (num < 31556952) {
+            const months = Math.floor(num / 2629746);
+            const weeks = Math.floor((num % 2629746) / 604800);
+            let result = `${months} month${months !== 1 ? 's' : ''}`;
+            if (weeks > 0) {
+                result += ` ${weeks} week${weeks !== 1 ? 's' : ''}`;
+            }
+            return result;
+        } else {
+            const years = Math.floor(num / 31556952);
+            const months = Math.floor((num % 31556952) / 2629746);
+            let result = `${years} year${years !== 1 ? 's' : ''}`;
+            if (months > 0) {
+                result += ` ${months} month${months !== 1 ? 's' : ''}`;
+            }
+            return result;
+        }
+    }
 });
 
 game.load();

@@ -25,7 +25,7 @@ const Producer: Component<ProducerProps> = (props) => {
             class="producer"
         >
             <div class="producer__name">{producers[index].name}</div>
-            <div class="producer__price">{Math.floor(producers[index].price)}</div>
+            <div class="producer__price">{game.format(producers[index].price)}</div>
             <div class="producer__amount">{producers[index].amount}</div>
         </div>
     )
