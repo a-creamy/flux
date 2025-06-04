@@ -78,15 +78,18 @@ const Clock: Component<ClockProps> = (props) => {
     });
 
     return (
-        <canvas
-            class="clock"
-            ref={canvasRef}
-            height={props.height}
-            width={props.width}
-            onClick={() => {
-                setGame("time", () => game.time + 1);
-            }}
-        />
+        <>
+            <div class="clock__time">{game.format(game.time)}</div>
+            <canvas
+                class="clock"
+                ref={canvasRef}
+                height={props.height}
+                width={props.width}
+                onClick={() => {
+                    setGame("time", () => game.time + 1);
+                }}
+            />
+        </>
     );
 }
 
