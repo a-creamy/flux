@@ -48,7 +48,7 @@ game.load();
 
 setInterval(() => {
     game.save();
-}, 10000);
+}, 1000);
 
 setInterval(() => {
     let result: number = 0;
@@ -63,5 +63,3 @@ setInterval(() => {
 setInterval(() => {
     setGame("time", () => game.time + game.tps / 100);
 }, 10);
-
-

@@ -1,4 +1,4 @@
-import { For } from "solid-js";
+import { For, type Component } from "solid-js";
 import { game, setGame } from "./game";
 import "../App.css";
 
@@ -6,7 +6,7 @@ interface ProducerProps {
     index: number,
 }
 
-const Producer = (props: ProducerProps) => {
+const Producer: Component<ProducerProps> = (props) => {
     const index = props.index;
     const producers = game.shop.producers;
 
