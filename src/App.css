@@ -27,9 +27,8 @@
     height: 8vh;
     border: 3px solid black;
     border-radius: 10px;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    margin-bottom: 10px;
+    position: relative;
 }
 
 .producer__name {

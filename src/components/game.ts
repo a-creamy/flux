@@ -4,7 +4,7 @@ type Producers = {
     name: string,
     amount: number,
     price: number,
-    produce: { producet: Producers, amount: number } | number,
+    produce: { producet: string, amount: number } | number,
 }
 
 type Shop = {
@@ -25,7 +25,8 @@ export const [game, setGame] = createStore<Game>({
     tps: 0,
     shop: {
         producers: [
-            { name: "1st Cycle", amount: 1, price: 100, produce: 1 },
+            { name: "1st Cycle", amount: 1, price: 60, produce: 1 },
+            { name: "2nd Cycle", amount: 0, price: 300, produce: { producet: "1st Cycle", amount: 1 } },
         ],
     },
     save: () => {
@@ -40,7 +41,16 @@ export const [game, setGame] = createStore<Game>({
             }
 
             setGame("time", () => savedGame.time);
-            setGame("shop", "producers", () => savedGame.shop.producers);
+
+            const currentProducers = game.shop.producers;
+            const savedProducers = savedGame.shop.producers;
+
+            const mergedProducers = currentProducers.map(defaultProducer => {
+                const savedProducer = savedProducers.find(p => p.name === defaultProducer.name);
+                return savedProducer || defaultProducer;
+            });
+
+            setGame("shop", "producers", () => mergedProducers);
         }
     },
     format: (num: number) => {
@@ -111,10 +121,20 @@ setInterval(() => {
     for (const producer of game.shop.producers) {
         if (typeof producer.produce === 'number') {
             result += producer.produce * producer.amount;
+        } else if (typeof producer.produce === 'object') {
+            const producet = game.shop.producers.find(obj => obj.name == (producer.produce as { producet: string; amount: number }).producet);
+
+            if (producet !== undefined) {
+                let index = parseInt(producet.name[0]) - 1;
+                setGame("shop", "producers", index, () => ({
+                    ...game.shop.producers[index],
+                    amount: game.shop.producers[index].amount + 1,
+                }));
+            }
         }
     }
     setGame("tps", () => result);
-}, 1000);
+}, 10);
 
 setInterval(() => {
     setGame("time", () => game.time + game.tps / 100);
