@@ -1,94 +1,46 @@
-import { For } from 'solid-js';
-import '../App.css';
-import { setGame, game } from './game';
+import { For, type Component } from "solid-js";
+import { game, setGame } from "./game";
+import "../App.css";
 
-const Producer = (props) => {
-    let index: number = game.producers.findIndex(producer => producer.name == props.name);
+interface ProducerProps {
+    index: number,
+}
+
+const Producer: Component<ProducerProps> = (props) => {
+    const index = props.index;
+    const producers = game.shop.producers;
 
     return (
-        <div style={{
-            "font-size": '2rem',
-            "border-bottom": '2px solid black',
-            "user-select": 'none',
-            cursor: 'pointer',
-            height: '7%',
-            width: '100%',
-            position: 'relative',
-        }}
+        <div
             onClick={() => {
-                if (game.number >= game.producers[index].price) {
-                    setGame("number", () => game.number - game.producers[index].price);
-                    setGame("producers", index, () => ({
-                        ...game.producers[index],
-                        price: game.producers[index].price * 1.15,
-                        amount: game.producers[index].amount + 1,
+                if (game.time >= producers[index].price) {
+                    setGame("time", () => game.time - producers[index].price);
+                    setGame("shop", "producers", index, () => ({
+                        ...producers[index],
+                        price: producers[index].price * 1.15,
+                        amount: producers[index].amount + 1,
                     }));
                 }
-            }}>
-            <div style={{
-                "font-size": '2rem',
-                position: 'absolute',
-                left: '3%',
-                top: '1%',
-            }}>{game.producers[index].name}</div>
-            <div style={{
-                "font-size": '1.5rem',
-                position: 'absolute',
-                left: '3%',
-                bottom: '1%',
-            }}>{Math.ceil(game.producers[index].price)}</div>
-            <div style={{
-                "font-size": '2rem',
-                position: 'absolute',
-                right: '3%',
-                top: '50%',
-                transform: 'translateY(-50%)',
-            }}>{game.producers[index].amount}</div>
+            }}
+            class="producer"
+        >
+            <div class="producer__name">{producers[index].name}</div>
+            <div class="producer__price">{game.format(producers[index].price)}</div>
+            <div class="producer__amount">{Math.floor(producers[index].amount)}</div>
         </div>
     )
 }
 
-export default function Shop() {
-    let visible: boolean = false;
-
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 's' || event.key === 'S') {
-            const element: Element | null = document.querySelector('.shop');
-
-
-            if (!visible) {
-                visible = true;
-                if (element !== null) {
-                    element.style.display = 'block';
-                }
-
-            } else {
-                visible = false;
-                if (element !== null) {
-                    element.style.display = 'none';
-                }
-            }
-        }
-    });
-
+const Shop = () => {
     return (
         <div class='shop'>
-            <div style={{
-                "z-index": 10,
-                position: 'absolute',
-                right: '1vh',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                height: '98vh',
-                width: '20vw',
-                border: '2px solid black',
-            }}>
-                <For each={game.producers}>
-                    {(item, _) =>
-                        <Producer name={item.name} />
-                    }
-                </For>
-            </div>
+            <For each={game.shop.producers}>
+                {(_, index) =>
+                    <Producer index={index()} />
+                }
+            </For>
         </div>
     )
 }
+
+export default Shop;

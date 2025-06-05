@@ -1,22 +1,53 @@
-.number {
-    all: unset;
-    cursor: pointer;
-    user-select: none;
-    font-size: 10rem;
+.clock {
     position: absolute;
-    left: 50%;
     top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
 }
 
-.shop {
-    display: none;
-    z-index: 10;
-    height: 100vh;
-    width: 100vw;
-    background-color: rbga(255, 255, 255, 0.5);
-    backdrop-filter: blur(10px);
+.clock__time {
+    font-size: 2rem;
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.shop {
+    user-select: none;
+    float: right;
+    height: 100vh;
+    width: 35vw;
+    position: relative;
+}
+
+.producer {
+    cursor: pointer;
+    width: 100%;
+    height: 8vh;
+    border: 3px solid black;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.producer__name {
+    font-size: 2rem;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+.producer__price {
+    font-size: 1.5rem;
+    margin-left: 5px;
+    position: absolute;
+    bottom: 5px;
+}
+
+.producer__amount {
+    font-size: 2rem;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
 }
