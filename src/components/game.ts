@@ -37,7 +37,7 @@ export const [game, setGame] = createStore<Game>({
         if (!json) { return; }
 
         const savedGame: Game = JSON.parse(json);
-        if (savedGame == null || savedGame == undefined) {
+        if (savedGame === null || savedGame === undefined || savedGame.shop === undefined) {
             return;
         }
 
