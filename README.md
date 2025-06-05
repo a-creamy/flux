@@ -1,2 +1,2 @@
-# Quantity
-An idle game about making a number going up
+# Flux
+An idle game about getting time up
