@@ -33,7 +33,7 @@ export const [game, setGame] = createStore<Game>({
         localStorage.setItem("game", JSON.stringify(game));
     },
     load: () => {
-        const json = localStorage.getItem("game");
+        const json: string | null = localStorage.getItem("game");
         if (!json) { return; }
 
         const savedGame: Game = JSON.parse(json);
@@ -119,7 +119,7 @@ setInterval(() => {
 setInterval(() => {
     let result: number = 0;
     for (const producer of game.shop.producers) {
-        if (typeof producer.produce !== "number") { return; }
+        if (typeof producer.produce !== "number") { continue; }
         result += producer.produce * producer.amount;
     }
     setGame("tps", () => result);
@@ -127,10 +127,10 @@ setInterval(() => {
 
 setInterval(() => {
     for (const producer of game.shop.producers) {
-        if (typeof producer.produce !== "object") { return; }
+        if (typeof producer.produce !== "object") { continue; }
 
         const producet = game.shop.producers.find(obj => obj.name == (producer.produce as { producet: string; amount: number }).producet);
-        if (!producet) { return; }
+        if (!producet) { continue; }
 
         let index = parseInt(producet.name[0]) - 1;
         setGame("shop", "producers", index, "amount",
