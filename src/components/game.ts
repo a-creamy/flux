@@ -34,24 +34,24 @@ export const [game, setGame] = createStore<Game>({
     },
     load: () => {
         const json = localStorage.getItem("game");
-        if (json !== null) {
-            const savedGame: Game = JSON.parse(json);
-            if (savedGame == null || savedGame == undefined) {
-                return;
-            }
+        if (!json) { return; }
 
-            setGame("time", () => savedGame.time);
-
-            const currentProducers = game.shop.producers;
-            const savedProducers = savedGame.shop.producers;
-
-            const mergedProducers = currentProducers.map(defaultProducer => {
-                const savedProducer = savedProducers.find(p => p.name === defaultProducer.name);
-                return savedProducer || defaultProducer;
-            });
-
-            setGame("shop", "producers", () => mergedProducers);
+        const savedGame: Game = JSON.parse(json);
+        if (savedGame == null || savedGame == undefined) {
+            return;
         }
+
+        setGame("time", () => savedGame.time);
+
+        const currentProducers = game.shop.producers;
+        const savedProducers = savedGame.shop.producers;
+
+        const mergedProducers = currentProducers.map(defaultProducer => {
+            const savedProducer = savedProducers.find(p => p.name === defaultProducer.name);
+            return savedProducer || defaultProducer;
+        });
+
+        setGame("shop", "producers", () => mergedProducers);
     },
     format: (num: number) => {
         num = Math.floor(num);
@@ -119,21 +119,24 @@ setInterval(() => {
 setInterval(() => {
     let result: number = 0;
     for (const producer of game.shop.producers) {
-        if (typeof producer.produce === 'number') {
-            result += producer.produce * producer.amount;
-        } else if (typeof producer.produce === 'object') {
-            const producet = game.shop.producers.find(obj => obj.name == (producer.produce as { producet: string; amount: number }).producet);
-
-            if (producet !== undefined) {
-                let index = parseInt(producet.name[0]) - 1;
-                setGame("shop", "producers", index, () => ({
-                    ...game.shop.producers[index],
-                    amount: game.shop.producers[index].amount + 1,
-                }));
-            }
-        }
+        if (typeof producer.produce !== "number") { return; }
+        result += producer.produce * producer.amount;
     }
     setGame("tps", () => result);
+}, 10);
+
+setInterval(() => {
+    for (const producer of game.shop.producers) {
+        if (typeof producer.produce !== "object") { return; }
+
+        const producet = game.shop.producers.find(obj => obj.name == (producer.produce as { producet: string; amount: number }).producet);
+        if (!producet) { return; }
+
+        let index = parseInt(producet.name[0]) - 1;
+        setGame("shop", "producers", index, "amount",
+            game.shop.producers[index].amount + (producer.produce.amount * producer.amount) / 100
+        );
+    }
 }, 10);
 
 setInterval(() => {
