@@ -63,7 +63,7 @@ const Clock: Component<ClockProps> = (props) => {
                 ctx.rotate(-pos);
             }
 
-            let hour = (game.time / 720) % 12;
+            let hour = (game.time / 720) % 60;
             let minute = (game.time / 12) % 60;
             let second = game.time % 60;
 
