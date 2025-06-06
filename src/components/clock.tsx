@@ -65,7 +65,7 @@ const Clock: Component<ClockProps> = (props) => {
             }
 
             let hour = (game.time / 720) % 60;
-            let minute = (game.time / 12) % 60;
+            let minute = (game.time / 60) % 60;
             let second = game.time % 60;
 
             hour = (hour * Math.PI / 30);

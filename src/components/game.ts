@@ -28,6 +28,7 @@ export const [game, setGame] = createStore<Game>({
         producers: [
             { name: "1st Cycle", amount: 1, price: 60, produce: 1 },
             { name: "2nd Cycle", amount: 0, price: 300, produce: { producet: "1st Cycle", amount: 1 } },
+            { name: "3rd Cycle", amount: 0, price: 1800, produce: { producet: "2nd Cycle", amount: 1 } },
         ],
     },
     save: () => {
