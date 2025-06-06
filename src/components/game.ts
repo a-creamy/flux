@@ -18,6 +18,7 @@ type Game = {
     save: Function;
     load: Function;
     format: Function;
+    shortFormat: Function,
 }
 
 export const [game, setGame] = createStore<Game>({
@@ -106,6 +107,21 @@ export const [game, setGame] = createStore<Game>({
                 result += ` ${months} month${months !== 1 ? 's' : ''}`;
             }
             return result;
+        }
+    },
+    shortFormat: (num: number) => {
+        if (num < 1e3) {
+            return Math.floor(num).toString();
+        } else if (num < 1e6) {
+            return (num / 1e3).toFixed(1).replace(/\.0$/, '') + 'k';
+        } else if (num < 1e9) {
+            return (num / 1e6).toFixed(1).replace(/\.0$/, '') + 'm';
+        } else if (num < 1e12) {
+            return (num / 1e9).toFixed(1).replace(/\.0$/, '') + 'b';
+        } else if (num < 1e15) {
+            return (num / 1e12).toFixed(1).replace(/\.0$/, '') + 't';
+        } else if (num < 1e18) {
+            return (num / 1e15).toFixed(1).replace(/\.0$/, '') + 'q';
         }
     }
 });

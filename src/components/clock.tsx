@@ -17,7 +17,8 @@ const Clock: Component<ClockProps> = (props) => {
         const ctx = canvas.getContext("2d");
         if (!ctx) { return; }
 
-        ctx.fillStyle = "black";
+        ctx.fillStyle = "white";
+        ctx.strokeStyle = "white";
 
         let radius = canvas.height / 2;
         ctx.translate(radius, radius);
