@@ -81,6 +81,7 @@ const Clock: Component<ClockProps> = (props) => {
     return (
         <>
             <div class="clock__time">{game.format(game.time)}</div>
+            <div class="clock__tps">{game.format(game.tps)}</div>
             <canvas
                 class="clock"
                 ref={canvasRef}

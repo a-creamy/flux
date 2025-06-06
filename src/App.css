@@ -13,6 +13,14 @@
 .clock__time {
     font-size: 2rem;
     position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.clock__tps {
+    font-size: 1.5rem;
+    position: absolute;
     top: 30%;
     left: 50%;
     transform: translateX(-50%);
