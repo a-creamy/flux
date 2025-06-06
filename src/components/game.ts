@@ -94,7 +94,7 @@ export const [game, setGame] = createStore<Game>({
             return `${num} second${num !== 1 ? 's' : ''}`;
         } else if (num < 3600) {
             const minutes = Math.floor(num / 60);
-            const seconds = num % 60;
+            const seconds = Math.floor(num) % 60;
             let result = `${minutes} minute${minutes !== 1 ? 's' : ''}`;
             if (seconds > 0) {
                 result += ` ${seconds} second${seconds !== 1 ? 's' : ''}`;
