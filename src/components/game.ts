@@ -22,11 +22,11 @@ type Game = {
 }
 
 export const [game, setGame] = createStore<Game>({
-    time: 0,
+    time: 1e-30 * 60,
     tps: 0,
     shop: {
         producers: [
-            { name: "1st Cycle", amount: 1, price: 1e-30 * 60, produce: 1e-30 },
+            { name: "1st Cycle", amount: 0, price: 1e-30 * 60, produce: 1e-30 },
             { name: "2nd Cycle", amount: 0, price: 1e-30 * 300, produce: { producet: "1st Cycle", amount: 1 } },
             { name: "3rd Cycle", amount: 0, price: 1e-30 * 1800, produce: { producet: "2nd Cycle", amount: 1 } },
             { name: "4th Cycle", amount: 0, price: 1e-30 * 7200, produce: { producet: "3rd Cycle", amount: 1 } },

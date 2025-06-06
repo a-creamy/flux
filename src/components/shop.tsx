@@ -9,11 +9,21 @@ interface ProducerProps {
 const Producer: Component<ProducerProps> = (props) => {
     const index = props.index;
     const producers = game.shop.producers;
+    const hidden: Function = () => {
+        if (index === 0) return false;
+        return producers[index - 1]?.amount === 0 || producers[index - 1] === undefined;
+    };
 
     return (
         <div
+            class="producer"
+            hidden={hidden()}
+            style={{
+                "pointer-events": hidden() ? "none" : "auto",
+                opacity: hidden() ? 0 : 1
+            }}
             onClick={() => {
-                if (game.time >= producers[index].price) {
+                if (!hidden() && game.time >= producers[index].price) {
                     setGame("time", () => game.time - producers[index].price);
                     setGame("shop", "producers", index, () => ({
                         ...producers[index],
@@ -22,18 +32,18 @@ const Producer: Component<ProducerProps> = (props) => {
                     }));
                 }
             }}
-            class="producer"
+
         >
             <div class="producer__name">{producers[index].name}</div>
             <div class="producer__price">{game.format(producers[index].price)}</div>
             <div class="producer__amount">{game.shortFormat(producers[index].amount)}</div>
         </div>
-    )
+    );
 }
 
 const Shop = () => {
     return (
-        <div class='shop'>
+        <div class="shop">
             <For each={game.shop.producers}>
                 {(_, index) =>
                     <Producer index={index()} />
