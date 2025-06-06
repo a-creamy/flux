@@ -26,9 +26,9 @@ export const [game, setGame] = createStore<Game>({
     tps: 0,
     shop: {
         producers: [
-            { name: "1st Cycle", amount: 1, price: 60, produce: 1 },
-            { name: "2nd Cycle", amount: 0, price: 300, produce: { producet: "1st Cycle", amount: 1 } },
-            { name: "3rd Cycle", amount: 0, price: 1800, produce: { producet: "2nd Cycle", amount: 1 } },
+            { name: "1st Cycle", amount: 1, price: 1e-30 * 60, produce: 1e-30 },
+            { name: "2nd Cycle", amount: 0, price: 1e-30 * 300, produce: { producet: "1st Cycle", amount: 1 } },
+            { name: "3rd Cycle", amount: 0, price: 1e-30 * 1800, produce: { producet: "2nd Cycle", amount: 1 } },
         ],
     },
     save: () => {
@@ -56,9 +56,40 @@ export const [game, setGame] = createStore<Game>({
         setGame("shop", "producers", () => mergedProducers);
     },
     format: (num: number) => {
-        num = Math.floor(num);
-
-        if (num < 60) {
+        if (num < 1e-27) {
+            const quectoseconds = Math.floor(num * 1e30);
+            return `${quectoseconds} quectosecond${quectoseconds !== 1 ? 's' : ''}`;
+        } else if (num < 1e-24) {
+            const rontoseconds = Math.floor(num * 1e27);
+            return `${rontoseconds} rontosecond${rontoseconds !== 1 ? 's' : ''}`;
+        } else if (num < 1e-21) {
+            const yoctoseconds = Math.floor(num * 1e24);
+            return `${yoctoseconds} yoctosecond${yoctoseconds !== 1 ? 's' : ''}`;
+        } else if (num < 1e-18) {
+            const zeptoseconds = Math.floor(num * 1e21);
+            return `${zeptoseconds} zeptosecond${zeptoseconds !== 1 ? 's' : ''}`;
+        } else if (num < 1e-15) {
+            const attoseconds = Math.floor(num * 1e18);
+            return `${attoseconds} attosecond${attoseconds !== 1 ? 's' : ''}`;
+        } else if (num < 1e-12) {
+            const femtoseconds = Math.floor(num * 1e15);
+            return `${femtoseconds} femtosecond${femtoseconds !== 1 ? 's' : ''}`;
+        } else if (num < 1e-9) {
+            const picoseconds = Math.floor(num * 1e12);
+            return `${picoseconds} picosecond${picoseconds !== 1 ? 's' : ''}`;
+        } else if (num < 1e-6) {
+            const nanoseconds = Math.floor(num * 1e9);
+            return `${nanoseconds} nanosecond${nanoseconds !== 1 ? 's' : ''}`;
+        } else if (num < 1e-3) {
+            const microseconds = Math.floor(num * 1e6);
+            return `${microseconds} microsecond${microseconds !== 1 ? 's' : ''}`;
+        } else if (num < 1e-2) {
+            const milliseconds = Math.floor(num * 1e3);
+            return `${milliseconds} millisecond${milliseconds !== 1 ? 's' : ''}`;
+        } else if (num < 1) {
+            const centiseconds = Math.floor(num * 100);
+            return `${centiseconds} centisecond${centiseconds !== 1 ? 's' : ''}`;
+        } else if (num < 60) {
             return `${num} second${num !== 1 ? 's' : ''}`;
         } else if (num < 3600) {
             const minutes = Math.floor(num / 60);
@@ -131,7 +162,7 @@ game.load();
 
 setInterval(() => {
     game.save();
-}, 1000);
+}, 10000);
 
 setInterval(() => {
     let result: number = 0;

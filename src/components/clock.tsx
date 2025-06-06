@@ -1,6 +1,6 @@
 import { onMount, type Component, createEffect } from "solid-js";
 import "../App.css";
-import { game, setGame } from "./game";
+import { game } from "./game";
 
 interface ClockProps {
     height: number,
@@ -87,9 +87,6 @@ const Clock: Component<ClockProps> = (props) => {
                 ref={canvasRef}
                 height={props.height}
                 width={props.width}
-                onClick={() => {
-                    setGame("time", () => game.time + 1);
-                }}
             />
         </>
     );
