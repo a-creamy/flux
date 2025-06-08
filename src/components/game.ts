@@ -19,6 +19,9 @@ type Game = {
     load: Function;
     format: Function;
     shortFormat: Function,
+    calculateTPS: Function,
+    calculateProducer: Function,
+    gain: Function,
 }
 
 export const [game, setGame] = createStore<Game>({
@@ -156,6 +159,32 @@ export const [game, setGame] = createStore<Game>({
         } else if (num < 1e18) {
             return (num / 1e15).toFixed(1).replace(/\.0$/, '') + 'q';
         }
+    },
+    calculateTPS: () => {
+        let result: number = 0;
+        for (const producer of game.shop.producers) {
+            if (typeof producer.produce !== "number") { continue; }
+            result += producer.produce * producer.amount;
+        }
+        setGame("tps", () => result);
+
+    },
+    calculateProducer: () => {
+        for (const producer of game.shop.producers) {
+            if (typeof producer.produce !== "object") { continue; }
+
+            const producet = game.shop.producers.find(obj => obj.name == (producer.produce as { producet: string; amount: number }).producet);
+            if (!producet) { continue; }
+
+            let index = parseInt(producet.name[0]) - 1;
+            setGame("shop", "producers", index, "amount",
+                game.shop.producers[index].amount + (producer.produce.amount * producer.amount) / 100
+            );
+        }
+
+    },
+    gain: () => {
+        setGame("time", () => game.time + game.tps / 100);
     }
 });
 
@@ -163,31 +192,86 @@ game.load();
 
 setInterval(() => {
     game.save();
-}, 10000);
+}, 1000);
 
-setInterval(() => {
-    let result: number = 0;
-    for (const producer of game.shop.producers) {
-        if (typeof producer.produce !== "number") { continue; }
-        result += producer.produce * producer.amount;
+let lastActiveTime = Date.now();
+let tpsInterval: number, producerInterval: number, gainInterval: number;
+
+tpsInterval = setInterval(game.calculateTPS, 10);
+producerInterval = setInterval(game.calculateProducer, 10);
+gainInterval = setInterval(game.gain, 10);
+
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        clearInterval(tpsInterval);
+        clearInterval(producerInterval);
+        clearInterval(gainInterval);
+        lastActiveTime = Date.now();
+    } else {
+        const timeAway = Date.now() - lastActiveTime;
+
+        for (let i = 0; i < timeAway / 10; i++) {
+            game.calculateTPS();
+            game.calculateProducer();
+            game.gain();
+        }
+
+        tpsInterval = setInterval(game.calculateTPS, 10);
+        producerInterval = setInterval(game.calculateProducer, 10);
+        gainInterval = setInterval(game.gain, 10);
     }
-    setGame("tps", () => result);
-}, 10);
+});
 
-setInterval(() => {
-    for (const producer of game.shop.producers) {
-        if (typeof producer.produce !== "object") { continue; }
+function createWelcomeScreen() {
+    const overlay = document.createElement('div');
+    overlay.className = 'welcome__overlay';
 
-        const producet = game.shop.producers.find(obj => obj.name == (producer.produce as { producet: string; amount: number }).producet);
-        if (!producet) { continue; }
+    const box = document.createElement('div');
+    box.className = 'welcome__box';
 
-        let index = parseInt(producet.name[0]) - 1;
-        setGame("shop", "producers", index, "amount",
-            game.shop.producers[index].amount + (producer.produce.amount * producer.amount) / 100
-        );
+    const title = document.createElement('h2');
+    title.className = 'welcome__title';
+    title.textContent = 'Welcome Back!';
+
+    const progressBar = document.createElement('div');
+    progressBar.className = 'welcome__progressbar';
+
+    const progress = document.createElement('div');
+    progress.className = 'welcome__progress';
+
+    progressBar.appendChild(progress);
+    box.appendChild(title);
+    box.appendChild(progressBar);
+    overlay.appendChild(box);
+
+    return { overlay, progress };
+}
+
+window.addEventListener("beforeunload", () => {
+    localStorage.setItem("exit", JSON.stringify(Date.now()));
+});
+
+window.addEventListener("load", async () => {
+    const json = localStorage.getItem("exit");
+    if (!json) { return; }
+
+    const exit = JSON.parse(json);
+    const timeGone = Date.now() - exit;
+    const iterations = timeGone / 10;
+
+    const screen = createWelcomeScreen();
+    document.body.appendChild(screen.overlay);
+
+    for (let i = 0; i < iterations; i++) {
+        game.calculateTPS();
+        game.calculateProducer();
+        game.gain();
+
+        if (i % 1000 === 0) {
+            screen.progress.style.width = ((i / iterations) * 100) + '%';
+            await new Promise(r => setTimeout(r, 1));
+        }
     }
-}, 10);
 
-setInterval(() => {
-    setGame("time", () => game.time + game.tps / 100);
-}, 10);
+    screen.overlay.remove();
+});
