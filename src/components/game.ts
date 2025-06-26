@@ -4,6 +4,7 @@ type Producers = {
     name: string,
     amount: number,
     price: number,
+    negative: number,
     produce: { producet: string, amount: number } | number,
 }
 
@@ -29,10 +30,10 @@ export const [game, setGame] = createStore<Game>({
     tps: 0,
     shop: {
         producers: [
-            { name: "1st Cycle", amount: 0, price: 1e-30 * 60, produce: 1e-30 },
-            { name: "2nd Cycle", amount: 0, price: 1e-30 * 300, produce: { producet: "1st Cycle", amount: 1 } },
-            { name: "3rd Cycle", amount: 0, price: 1e-30 * 1800, produce: { producet: "2nd Cycle", amount: 1 } },
-            { name: "4th Cycle", amount: 0, price: 1e-30 * 7200, produce: { producet: "3rd Cycle", amount: 1 } },
+            { name: "1st Cycle", amount: 0, price: 1e-30 * 60, produce: 1e-30, negative: 1 },
+            { name: "2nd Cycle", amount: 0, price: 1e-30 * 300, negative: 1, produce: { producet: "1st Cycle", amount: 1 } },
+            { name: "3rd Cycle", amount: 0, price: 1e-30 * 1800, negative: 1, produce: { producet: "2nd Cycle", amount: 1 } },
+            { name: "4th Cycle", amount: 0, price: 1e-30 * 7200, negative: 1, produce: { producet: "3rd Cycle", amount: 1 } },
         ],
     },
     save: () => {
@@ -164,7 +165,7 @@ export const [game, setGame] = createStore<Game>({
         let result: number = 0;
         for (const producer of game.shop.producers) {
             if (typeof producer.produce !== "number") { continue; }
-            result += producer.produce * producer.amount;
+            result += (producer.produce * producer.amount) * producer.negative;
         }
         setGame("tps", () => result);
 
@@ -178,7 +179,7 @@ export const [game, setGame] = createStore<Game>({
 
             let index = parseInt(producet.name[0]) - 1;
             setGame("shop", "producers", index, "amount",
-                game.shop.producers[index].amount + (producer.produce.amount * producer.amount) / 100
+                game.shop.producers[index].amount + (producer.produce.amount * producer.amount * producer.negative) / 100
             );
         }
 
@@ -192,7 +193,7 @@ game.load();
 
 setInterval(() => {
     game.save();
-}, 1000);
+}, 10000);
 
 let lastActiveTime = Date.now();
 let tpsInterval: number, producerInterval: number, gainInterval: number;

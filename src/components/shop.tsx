@@ -29,6 +29,7 @@ const Producer: Component<ProducerProps> = (props) => {
                         ...producers[index],
                         price: producers[index].price * 1.15,
                         amount: producers[index].amount + 1,
+                        negative: producers[index].negative + 0.01,
                     }));
                 }
             }}
@@ -36,6 +37,7 @@ const Producer: Component<ProducerProps> = (props) => {
         >
             <div class="producer__name">{producers[index].name}</div>
             <div class="producer__price">{game.format(producers[index].price)}</div>
+            <div class="producer__negative">{producers[index].negative}N</div>
             <div class="producer__amount">{game.shortFormat(producers[index].amount)}</div>
         </div>
     );
