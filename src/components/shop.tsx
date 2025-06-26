@@ -37,7 +37,7 @@ const Producer: Component<ProducerProps> = (props) => {
         >
             <div class="producer__name">{producers[index].name}</div>
             <div class="producer__price">{game.format(producers[index].price)}</div>
-            <div class="producer__negative">{producers[index].negative}N</div>
+            <div class="producer__negative">{parseFloat(producers[index].negative.toFixed(2))}N</div>
             <div class="producer__amount">{game.shortFormat(producers[index].amount)}</div>
         </div>
     );

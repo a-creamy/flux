@@ -52,11 +52,10 @@
 }
 
 .producer__negative {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     position: absolute;
-    right: 80px;
-    top: 50%;
-    transform: translateY(-50%);
+    right: 135px;
+    top: 5px;
 }
 
 .producer__amount {
