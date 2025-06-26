@@ -29,6 +29,7 @@
     position: relative;
 }
 
+
 .producer {
     cursor: pointer;
     width: 100%;
@@ -52,10 +53,10 @@
 }
 
 .producer__negative {
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     position: absolute;
-    right: 135px;
-    top: 5px;
+    right: 45%;
+    top: 2.5px;
 }
 
 .producer__amount {
@@ -125,6 +126,11 @@
         font-size: 1rem;
     }
 
+    .producer__negative {
+        font-size: 1.2rem;
+        right: 40%;
+    }
+
     .producer__amount {
         font-size: 1.5rem;
     }
@@ -164,6 +170,11 @@
 
     .producer__price {
         font-size: 0.8rem;
+    }
+
+    .producer__negative {
+        font-size: 1rem;
+        right: 30%;
     }
 
     .producer__amount {
